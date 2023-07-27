@@ -3,9 +3,26 @@ const router = express.Router();
 
 // model
 const Permission = require("../models/Permission");
+const seed = require('../seed/permissions');
 
 // routes
+router.post("/seed", async(req, res, next) => {
+  try {
+    await Permission.deleteMany({});
+    await Permission.insertMany(seed);
+    return res.status(200).json({
+      message: "Permissions seeded successfully"
+    });
+  } catch(error) {
+    return next(error);
+  }
+});
+
 router.get("/", async (req, res, next) => {
+  if(!req._user.permissions.includes("Can view permissions")) {
+    return res.status(403).json("You are not authorized to access this resource");
+  }
+
   try {
     const all = await Permission.find();
     return res.status(200).json(all);
@@ -15,6 +32,10 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:id", async (req, res, next) => {
+  if(!req._user.permissions.includes("Can view permissions")) {
+    return res.status(403).json("You are not authorized to access this resource");
+  }
+
   try {
     const single = await Permission.findById(req.params.id);
     return res.status(200).json(single);
@@ -23,6 +44,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+/*
 router.post("/", async (req, res, next) => {
   try {
     const created = new Permission({
@@ -56,5 +78,6 @@ router.delete("/:id", async (req, res, next) => {
     return next(error);
   }
 });
+*/
 
 module.exports = router;

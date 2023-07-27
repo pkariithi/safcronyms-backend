@@ -1,4 +1,5 @@
 const slugify = require('slugify');
+const bcrypt = require("bcryptjs");
 
 exports.getQueryParams = (query) => {
 
@@ -79,3 +80,7 @@ exports.randomDarkColor = () => {
 exports.err = (status, message) => {
   throw Object.assign(new Error(message), { status });
 };
+
+exports.hashPassword = async (password) => {
+  return await bcrypt.hash(password, 10);
+}

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Category = require("../models/Category");
+const Category = require("./Category");
 
 let acronymSchema = new Schema(
 {
@@ -19,10 +19,8 @@ let acronymSchema = new Schema(
       },
       examples: [
         {
-          example: {
-            type: String,
-            required: false,
-          }
+          type: String,
+          required: false,
         }
       ],
     }
@@ -40,14 +38,16 @@ let acronymSchema = new Schema(
   ]
 },
 {
-  collection: 'acronyms'
-},
-{
+  collection: 'acronyms',
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   }
 }
 );
+acronymSchema.index({
+  name: 'text',
+  status: 'text'
+});
 
 module.exports = mongoose.model('Acronym', acronymSchema);

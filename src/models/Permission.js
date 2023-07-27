@@ -10,14 +10,15 @@ let permissionSchema = new Schema(
   }
 },
 {
-  collection: 'permissions'
-},
-{
+  collection: 'permissions',
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   }
 }
 );
+permissionSchema.index({
+  name: 'text',
+});
 
 module.exports = mongoose.model('Permission', permissionSchema);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Role = require("../models/Role");
+const Role = require("./Role");
 
 let userSchema = new Schema(
 {
@@ -27,14 +27,16 @@ let userSchema = new Schema(
   ]
 },
 {
-  collection: 'users'
-},
-{
+  collection: 'users',
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
   }
 }
 );
+userSchema.index({
+  name: 'text',
+  email: 'text',
+});
 
 module.exports = mongoose.model('User', userSchema);

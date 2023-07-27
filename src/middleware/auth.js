@@ -18,7 +18,10 @@ exports.isAuthenticated = (req, res, next) => {
       }
 
       // Token is valid, set the id on the request object
-      req.user_id = payload.user_id;
+      req._user = {
+        id: payload._user.id,
+        permissions: payload._user.permissions
+      };
       next();
     });
   } catch (error) {
