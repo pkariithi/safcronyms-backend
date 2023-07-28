@@ -35,17 +35,21 @@ router.post("/login", async (req, res, next) => {
         }
       }
     }
-    console.log(permissions);
 
     // create token
     const jwtkey = process.env.JWT_KEY;
-    const token = jwt.sign({
-      _user: {
-        id: user._id,
-        permissions
-      }
-    }, jwtkey);
-    return res.status(200).json({ token, name: user.name });
+    const token = jwt.sign(
+      {_user: {id: user._id,permissions}},
+      jwtkey,
+      {expiresIn: "1d"}
+    );
+    return res.status(200).json({
+      token,
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      permissions
+    });
   } catch(error) {
     return next(error);
   }
